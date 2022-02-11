@@ -2,9 +2,10 @@ import os
 import scrapy
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
-from ..hf_worldometers import checkEmpty
+from ..hf_worldometers import checkEmpty,setNowTotalCases
 
-class CoronaVirusSpider(scrapy.Spider):
+# using selenium
+class CoronavirusSpider(scrapy.Spider):
     name = "coronavirus"
     allowed_domains = ["worldometers.info"]
     start_urls = [
@@ -18,6 +19,8 @@ class CoronaVirusSpider(scrapy.Spider):
         self.nowNewCases = ""
         self.nowTotalDeaths = ""
         self.nowNewDeaths = ""
+        self.nowTotalRecovered = ""
+        self.nowNewRecovered = ""
 
 
         self.options = Options()
@@ -46,8 +49,20 @@ class CoronaVirusSpider(scrapy.Spider):
                 else:
                     self.nowRank = "None"
 
-                test2 = webElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
-                test3 = webElem.find_element_by_xpath(".//td[3]").get_attribute("innerText")
+                nowCountry = webElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
+                if (nowCountry != "None"):
+                    self.nowCountry = nowCountry
+                else:
+                    self.nowCountry = "None"
+
+                nowTotalCases = webElem.find_element_by_xpath(".//td[3]").get_attribute("innerText")
+                setNowTotalCases(self,nowTotalCases)
+
+                nowNewCases = webElem.find_element_by_xpath(".//td[4]").get_attribute("innerText")
+                if (nowNewCases != "None"):
+                    self.nowNewCases = nowNewCases
+                else:
+                    self.nowNewCases = "None"
 
                 # //*[@id="main_table_countries_yesterday"]/tbody[1]/tr[5]/td[3]
 
