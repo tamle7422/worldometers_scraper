@@ -2,7 +2,8 @@ import os
 import scrapy
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
-from ..hf_worldometers import checkEmpty,setNowTotalCases
+from ..hf_worldometers import checkEmpty,setNowTotalCases,setNowNewCases,setNowTotalDeaths,setNowNewDeaths, \
+    setNowTotalRecovered
 
 # using selenium
 class CoronavirusSpider(scrapy.Spider):
@@ -11,6 +12,13 @@ class CoronavirusSpider(scrapy.Spider):
     start_urls = [
         'https://www.worldometers.info/coronavirus/#countries'
     ]
+
+    custom_settings = {
+        "ITEM_PIPELINES": {
+            'worldometers.pipelines.CoronavirusPipeline': 198,
+        },
+        "CLOSESPIDER_ITEMCOUNT": 21
+    }
 
     def __init__(self):
         self.nowRank = ""
@@ -21,6 +29,7 @@ class CoronavirusSpider(scrapy.Spider):
         self.nowNewDeaths = ""
         self.nowTotalRecovered = ""
         self.nowNewRecovered = ""
+        self.nowActiveCases = ""
 
 
         self.options = Options()
@@ -32,7 +41,7 @@ class CoronavirusSpider(scrapy.Spider):
         self.driver = webdriver.Firefox(executable_path=self.path,options=self.options)
         self.driver.get(response.url)
 
-        # //*[@id="nav-yesterday-tab"]/a
+        # simulate button click
         nowButton = self.driver.find_element_by_xpath("//li[contains(@id,'nav-today-tab')]/a")
         yesterdayButton = self.driver.find_element_by_xpath("//li[contains(@id,'nav-yesterday-tab')]/a")
         _2DaysButton = self.driver.find_element_by_xpath("//li[contains(@id,'nav-yesterday2-tab')]/a")
@@ -59,15 +68,18 @@ class CoronavirusSpider(scrapy.Spider):
                 setNowTotalCases(self,nowTotalCases)
 
                 nowNewCases = webElem.find_element_by_xpath(".//td[4]").get_attribute("innerText")
-                if (nowNewCases != "None"):
-                    self.nowNewCases = nowNewCases
-                else:
-                    self.nowNewCases = "None"
+                setNowNewCases(self,nowNewCases)
 
-                # //*[@id="main_table_countries_yesterday"]/tbody[1]/tr[5]/td[3]
+                nowTotalDeaths = webElem.find_element_by_xpath(".//td[5]").get_attribute("innerText")
+                setNowTotalDeaths(self,nowTotalDeaths)
 
-                # /html/body/div[3]/div[3]/div/div[6]/div[2]/div/table/tbody[1]/tr[5]/td[9]
-                print("")
+                nowNewDeaths = webElem.find_element_by_xpath(".//td[6]").get_attribute("innerText")
+                setNowNewDeaths(self,nowNewDeaths)
+
+                nowTotalRecovered = webElem.find_element_by_xpath(".//td[7]").get_attribute("innerText")
+                setNowTotalRecovered(self, nowTotalRecovered)
+
+
 
                 print("")
 

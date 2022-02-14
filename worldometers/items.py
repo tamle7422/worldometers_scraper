@@ -1,12 +1,14 @@
-# Define here the models for your scraped items
+# define here the models for your scraped items
 #
-# See documentation in:
+# see documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
 
-
-class WorldometersItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class CoronaItem(scrapy.Item):
+    nowCountry = scrapy.Field()
+    nowTotalCases = scrapy.Field()
+    nowNewCases = scrapy.Field()
+    nowTotalDeaths = scrapy.Field()
+    nowNewDeaths = scrapy.Field()
+    nowTotalRecovered = scrapy.Field()

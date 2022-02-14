@@ -7,7 +7,7 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 import pathlib
-from .hf_worldometers import printTime
+from .hf_worldometers import getTime
 
 BOT_NAME = 'worldometers'
 SPIDER_MODULES = ['worldometers.spiders']
@@ -90,7 +90,7 @@ HTTPCACHE_ENABLED = True
 RETRY_HTTP_CODES = [403]
 
 # logging
-logTime = printTime()
+logTime = getTime()
 pathLog = "log"
 pathlib.Path(pathLog).mkdir(parents=True,exist_ok=True)
 
