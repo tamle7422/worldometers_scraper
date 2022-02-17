@@ -1,4 +1,5 @@
 import re
+import pickle
 from datetime import datetime
 
 def getTime():
@@ -61,6 +62,41 @@ def setNowTotalRecovered(self,nowTotalRecovered):
     except Exception as ex:
         print("exception => error setting now total recovered --- {0}".format(ex))
         self.nowTotalRecovered = "None"
+
+def setNowNewRecovered(self,nowNewRecovered):
+    try:
+        if (nowNewRecovered != "None"):
+            self.nowNewRecovered = int(re.sub(r"[^0-9]","",nowNewRecovered))
+        else:
+            self.nowNewRecovered = "None"
+
+    except Exception as ex:
+        print("exception => error setting now new recovered --- {0}".format(ex))
+        self.nowNewRecovered = "None"
+
+def setNowActiveCases(self,nowActiveCases):
+    try:
+        if (nowActiveCases != "None"):
+            self.nowActiveCases = int(re.sub(r"[^0-9]","",nowActiveCases))
+        else:
+            self.nowActiveCases = "None"
+
+    except Exception as ex:
+        print("exception => error setting now active cases recovered --- {0}".format(ex))
+        self.nowActiveCases = "None"
+
+
+# dynamic assignment
+def setValue(self,value,type):
+    try:
+        if (value != "None"):
+            setattr(self,type,int(re.sub(r"[^0-9]","",value)))
+        else:
+            setattr(self,type,"None")
+
+    except Exception as ex:
+        print("exception => error setting {0} recovered --- {1}".format(type,ex))
+        setattr(self,type,"None")
 
 
 def checkEmpty(data):

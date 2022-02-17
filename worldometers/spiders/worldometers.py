@@ -3,7 +3,7 @@ import scrapy
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from ..hf_worldometers import checkEmpty,setNowTotalCases,setNowNewCases,setNowTotalDeaths,setNowNewDeaths, \
-    setNowTotalRecovered
+    setNowTotalRecovered,setNowNewRecovered,setNowActiveCases,setValue
 
 # using selenium
 class CoronavirusSpider(scrapy.Spider):
@@ -30,6 +30,8 @@ class CoronavirusSpider(scrapy.Spider):
         self.nowTotalRecovered = ""
         self.nowNewRecovered = ""
         self.nowActiveCases = ""
+        self.nowSeriousCritical = ""
+        self.nowCasesPerMillion = ""
 
 
         self.options = Options()
@@ -79,6 +81,17 @@ class CoronavirusSpider(scrapy.Spider):
                 nowTotalRecovered = webElem.find_element_by_xpath(".//td[7]").get_attribute("innerText")
                 setNowTotalRecovered(self, nowTotalRecovered)
 
+                nowNewRecovered = webElem.find_element_by_xpath(".//td[8]").get_attribute("innerText")
+                setNowNewRecovered(self,nowNewRecovered)
+
+                nowActiveCases = webElem.find_element_by_xpath(".//td[9]").get_attribute("innerText")
+                setNowActiveCases(self,nowActiveCases)
+
+                nowSeriousCritical = webElem.find_element_by_xpath(".//td[10]").get_attribute("innerText")
+                setValue(self,nowSeriousCritical,"nowSeriousCritical")
+
+                nowCasesPerMillion = webElem.find_element_by_xpath(".//td[11]").get_attribute("innerText")
+                setValue(self,nowCasesPerMillion,"nowCasesPerMillion")
 
 
                 print("")
