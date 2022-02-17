@@ -32,6 +32,7 @@ class CoronavirusSpider(scrapy.Spider):
         self.nowActiveCases = ""
         self.nowSeriousCritical = ""
         self.nowCasesPerMillion = ""
+        self.nowDeathsPerMillion = ""
 
 
         self.options = Options()
@@ -92,6 +93,9 @@ class CoronavirusSpider(scrapy.Spider):
 
                 nowCasesPerMillion = webElem.find_element_by_xpath(".//td[11]").get_attribute("innerText")
                 setValue(self,nowCasesPerMillion,"nowCasesPerMillion")
+
+                nowDeathsPerMillion = webElem.find_element_by_xpath(".//td[12]").get_attribute("innerText")
+                setValue(self, nowDeathsPerMillion, "nowDeathsPerMillion")
 
 
                 print("")

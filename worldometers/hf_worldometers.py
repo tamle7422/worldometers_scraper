@@ -85,7 +85,6 @@ def setNowActiveCases(self,nowActiveCases):
         print("exception => error setting now active cases recovered --- {0}".format(ex))
         self.nowActiveCases = "None"
 
-
 # dynamic assignment
 def setValue(self,value,type):
     try:
@@ -95,9 +94,8 @@ def setValue(self,value,type):
             setattr(self,type,"None")
 
     except Exception as ex:
-        print("exception => error setting {0} recovered --- {1}".format(type,ex))
+        print("exception => error setting {0} --- {1}".format(type,ex))
         setattr(self,type,"None")
-
 
 def checkEmpty(data):
     if (data == None or len(data) == 0):
