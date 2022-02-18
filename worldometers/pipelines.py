@@ -14,8 +14,10 @@ from datetime import datetime
 
 class CoronavirusPipeline:
     def __init__(self):
-        self.coronaDir = "csv_files/coronavirus"
-        self.coronaList = ["nowCountry","nowTotalCases","nowNewCases","nowTotalDeaths"]
+        self.coronaDir = "csv_files/virus"
+        self.coronaList = ["nowRank","nowCountry","nowTotalCases","nowNewCases","nowTotalDeaths","nowNewDeaths", \
+            "nowTotalRecovered","nowNewRecovered","nowActiveCases","nowSeriousCritical","nowCasesPerMillion", \
+            "nowDeathsPerMillion","nowTotalTests","nowTestsPerMillion","nowPopulation"]
 
         self.coronaWriter = ""
         self.coronaFileName = ""
@@ -31,7 +33,7 @@ class CoronavirusPipeline:
     def spider_opened(self,spider):
         # check system; change if on windows
         if (platform != "linux"):
-            self.coronaDir = "csv_files\\coronavirus"
+            self.coronaDir = "csv_files\\virus"
 
         today = datetime.today()
         dt = datetime(today.year,today.month,today.day)
@@ -55,7 +57,7 @@ class CoronavirusPipeline:
             if (len(item) == 0):
                 return item
             else:
-                self.fighterExporter.export_item(item)
+                self.coronaExporter.export_item(item)
                 return item
 
     def checkMonthDay(self,dayOrMonth):

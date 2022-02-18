@@ -3,7 +3,7 @@ import scrapy
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from ..hf_worldometers import checkEmpty,setNowTotalCases,setNowNewCases,setNowTotalDeaths,setNowNewDeaths, \
-    setNowTotalRecovered,setNowNewRecovered,setNowActiveCases,setValue
+    setNowTotalRecovered,setNowNewRecovered,setNowActiveCases,setValue,loadCoronaItem
 
 # using selenium
 class CoronavirusSpider(scrapy.Spider):
@@ -17,7 +17,7 @@ class CoronavirusSpider(scrapy.Spider):
         "ITEM_PIPELINES": {
             'worldometers.pipelines.CoronavirusPipeline': 198,
         },
-        "CLOSESPIDER_ITEMCOUNT": 21
+        "CLOSESPIDER_ITEMCOUNT": 11111
     }
 
     def __init__(self):
@@ -33,7 +33,9 @@ class CoronavirusSpider(scrapy.Spider):
         self.nowSeriousCritical = ""
         self.nowCasesPerMillion = ""
         self.nowDeathsPerMillion = ""
-
+        self.nowTotalTests = ""
+        self.nowTestsPerMillion = ""
+        self.nowPopulation = ""
 
         self.options = Options()
         print(os.getcwd())
@@ -51,7 +53,6 @@ class CoronavirusSpider(scrapy.Spider):
 
         try:
             self.driver.execute_script("arguments[0].click();",nowButton)
-
             trTagsNow = self.driver.find_elements_by_xpath("//table[contains(@id,'main_table_countries')]/tbody/tr[@class='odd' or @class='even']")
 
             for webElem in trTagsNow:
@@ -95,27 +96,35 @@ class CoronavirusSpider(scrapy.Spider):
                 setValue(self,nowCasesPerMillion,"nowCasesPerMillion")
 
                 nowDeathsPerMillion = webElem.find_element_by_xpath(".//td[12]").get_attribute("innerText")
-                setValue(self, nowDeathsPerMillion, "nowDeathsPerMillion")
+                setValue(self,nowDeathsPerMillion,"nowDeathsPerMillion")
 
+                nowTotalTests = webElem.find_element_by_xpath(".//td[13]").get_attribute("innerText")
+                setValue(self,nowTotalTests,"nowTotalTests")
 
-                print("")
+                nowTestsPerMillion = webElem.find_element_by_xpath(".//td[14]").get_attribute("innerText")
+                setValue(self,nowTestsPerMillion,"nowTestsPerMillion")
 
+                nowPopulation = webElem.find_element_by_xpath(".//td[15]").get_attribute("innerText")
+                setValue(self,nowPopulation,"nowPopulation")
 
+                loader = loadCoronaItem(self,response)
+                yield loader.load_item()
 
             self.driver.execute_script("arguments[0].click();", yesterdayButton)
-            # yesterdayButton.click()
-
             trTagsYesterday = self.driver.find_elements_by_xpath("//table[contains(@id,'main_table_countries')]/tbody/tr[@class='odd' or @class='even']")
 
             for webElem in trTagsYesterday:
-                test1 = webElem.find_element_by_xpath(".//td[1]").get_attribute("innerText")
-                test2 = webElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
-                test3 = webElem.find_element_by_xpath(".//td[3]").get_attribute("innerText")
+                nowRank = checkEmpty(webElem.find_element_by_xpath(".//td[1]").get_attribute("innerText"))
+                if (nowRank != "None"):
+                    self.nowRank = nowRank
+                else:
+                    self.nowRank = "None"
 
-                # //*[@id="main_table_countries_yesterday"]/tbody[1]/tr[5]/td[3]
-
-                # /html/body/div[3]/div[3]/div/div[6]/div[2]/div/table/tbody[1]/tr[5]/td[9]
-                print("")
+                nowCountry = webElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
+                if (nowCountry != "None"):
+                    self.nowCountry = nowCountry
+                else:
+                    self.nowCountry = "None"
 
                 print("")
 
