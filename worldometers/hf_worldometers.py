@@ -2,7 +2,7 @@ import re
 import pickle
 from datetime import datetime
 from scrapy.loader import ItemLoader
-from .items import NowCoronaItem
+from .items import NowCoronaItem,YesterdayCoronaItem
 
 def getTime():
     now = datetime.now()
@@ -131,6 +131,41 @@ def loadNowCoronaItem(self,response):
     loader.add_value("nowTotalTests",self.nowTotalTests)
     loader.add_value("nowTestsPerMillion",self.nowTestsPerMillion)
     loader.add_value("nowPopulation",self.nowPopulation)
+    return loader
+
+def loadYesterdayCoronaItem(self,response):
+    self.yesterdayRank = self.yesterdayRank if (len(self.yesterdayRank) != 0) else "None"
+    self.yesterdayCountry = self.yesterdayCountry if (len(self.yesterdayCountry) != 0) else "None"
+    self.yesterdayTotalCases = self.yesterdayTotalCases if (len(self.yesterdayTotalCases) != 0) else "None"
+    self.yesterdayNewCases = self.yesterdayNewCases if (len(self.yesterdayNewCases) != 0) else "None"
+    self.yesterdayTotalDeaths = self.yesterdayTotalDeaths if (len(self.yesterdayTotalDeaths) != 0) else "None"
+    self.yesterdayNewDeaths = self.yesterdayNewDeaths if (len(self.yesterdayNewDeaths) != 0) else "None"
+    self.yesterdayTotalRecovered = self.yesterdayTotalRecovered if (len(self.yesterdayTotalRecovered) != 0) else "None"
+    self.yesterdayNewRecovered = self.yesterdayNewRecovered if (len(self.yesterdayNewRecovered) != 0) else "None"
+    self.yesterdayActiveCases = self.yesterdayActiveCases if (len(self.yesterdayActiveCases) != 0) else "None"
+    self.yesterdaySeriousCritical = self.yesterdaySeriousCritical if (len(self.yesterdaySeriousCritical) != 0) else "None"
+    self.yesterdayCasesPerMillion = self.yesterdayCasesPerMillion if (len(self.yesterdayCasesPerMillion) != 0) else "None"
+    self.yesterdayDeathsPerMillion = self.yesterdayDeathsPerMillion if (len(self.yesterdayDeathsPerMillion) != 0) else "None"
+    self.yesterdayTotalTests = self.yesterdayTotalTests if (len(self.yesterdayTotalTests) != 0) else "None"
+    self.yesterdayTestsPerMillion = self.yesterdayTestsPerMillion if (len(self.yesterdayTestsPerMillion) != 0) else "None"
+    self.yesterdayPopulation = self.yesterdayPopulation if (len(self.yesterdayPopulation) != 0) else "None"
+
+    loader = ItemLoader(item=YesterdayCoronaItem(),response=response)
+    loader.add_value("yesterdayRank",self.yesterdayRank)
+    loader.add_value("yesterdayCountry",self.yesterdayCountry)
+    loader.add_value("yesterdayTotalCases",self.yesterdayTotalCases)
+    loader.add_value("yesterdayNewCases",self.yesterdayNewCases)
+    loader.add_value("yesterdayTotalDeaths",self.yesterdayTotalDeaths)
+    loader.add_value("yesterdayNewDeaths",self.yesterdayNewDeaths)
+    loader.add_value("yesterdayTotalRecovered",self.yesterdayTotalRecovered)
+    loader.add_value("yesterdayNewRecovered",self.yesterdayNewRecovered)
+    loader.add_value("yesterdayActiveCases",self.yesterdayActiveCases)
+    loader.add_value("yesterdaySeriousCritical",self.yesterdaySeriousCritical)
+    loader.add_value("yesterdayCasesPerMillion",self.yesterdayCasesPerMillion)
+    loader.add_value("yesterdayDeathsPerMillion",self.yesterdayDeathsPerMillion)
+    loader.add_value("yesterdayTotalTests",self.yesterdayTotalTests)
+    loader.add_value("yesterdayTestsPerMillion",self.yesterdayTestsPerMillion)
+    loader.add_value("yesterdayPopulation",self.yesterdayPopulation)
     return loader
 
 

@@ -22,6 +22,24 @@ class NowCoronaItem(scrapy.Item):
     nowTestsPerMillion = scrapy.Field()
     nowPopulation = scrapy.Field()
 
+class YesterdayCoronaItem(scrapy.Item):
+    yesterdayRank = scrapy.Field()
+    yesterdayCountry = scrapy.Field()
+    yesterdayTotalCases = scrapy.Field()
+    yesterdayNewCases = scrapy.Field()
+    yesterdayTotalDeaths = scrapy.Field()
+    yesterdayNewDeaths = scrapy.Field()
+    yesterdayTotalRecovered = scrapy.Field()
+    yesterdayNewRecovered = scrapy.Field()
+    yesterdayActiveCases = scrapy.Field()
+    yesterdaySeriousCritical = scrapy.Field()
+    yesterdayCasesPerMillion = scrapy.Field()
+    yesterdayDeathsPerMillion = scrapy.Field()
+    yesterdayTotalTests = scrapy.Field()
+    yesterdayTestsPerMillion = scrapy.Field()
+    yesterdayPopulation = scrapy.Field()
+
+
 
 
 

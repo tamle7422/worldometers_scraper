@@ -3,7 +3,7 @@ import scrapy
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from ..hf_worldometers import checkEmpty,setNowTotalCases,setNowNewCases,setNowTotalDeaths,setNowNewDeaths, \
-    setNowTotalRecovered,setNowNewRecovered,setNowActiveCases,setValue,loadNowCoronaItem
+    setNowTotalRecovered,setNowNewRecovered,setNowActiveCases,setValue,loadNowCoronaItem,loadYesterdayCoronaItem
 
 # using selenium
 class CoronavirusSpider(scrapy.Spider):
@@ -160,33 +160,29 @@ class CoronavirusSpider(scrapy.Spider):
                 yesterdayNewRecovered = yWebElem.find_element_by_xpath(".//td[8]").get_attribute("innerText")
                 setValue(self,yesterdayNewRecovered,"yesterdayNewRecovered")
 
+                yesterdayActiveCases = yWebElem.find_element_by_xpath(".//td[9]").get_attribute("innerText")
+                setValue(self,yesterdayActiveCases,"yesterdayActiveCases")
 
-                print("")
+                yesterdaySeriousCritical = yWebElem.find_element_by_xpath(".//td[10]").get_attribute("innerText")
+                setValue(self,yesterdaySeriousCritical,"yesterdaySeriousCritical")
 
+                yesterdayCasesPerMillion = yWebElem.find_element_by_xpath(".//td[11]").get_attribute("innerText")
+                setValue(self,yesterdayCasesPerMillion,"yesterdayCasesPerMillion")
 
-                # nowActiveCases = webElem.find_element_by_xpath(".//td[9]").get_attribute("innerText")
-                # setNowActiveCases(self, nowActiveCases)
-                #
-                # nowSeriousCritical = webElem.find_element_by_xpath(".//td[10]").get_attribute("innerText")
-                # setValue(self, nowSeriousCritical, "nowSeriousCritical")
-                #
-                # nowCasesPerMillion = webElem.find_element_by_xpath(".//td[11]").get_attribute("innerText")
-                # setValue(self, nowCasesPerMillion, "nowCasesPerMillion")
-                #
-                # nowDeathsPerMillion = webElem.find_element_by_xpath(".//td[12]").get_attribute("innerText")
-                # setValue(self, nowDeathsPerMillion, "nowDeathsPerMillion")
-                #
-                # nowTotalTests = webElem.find_element_by_xpath(".//td[13]").get_attribute("innerText")
-                # setValue(self, nowTotalTests, "nowTotalTests")
-                #
-                # nowTestsPerMillion = webElem.find_element_by_xpath(".//td[14]").get_attribute("innerText")
-                # setValue(self, nowTestsPerMillion, "nowTestsPerMillion")
-                #
-                # nowPopulation = webElem.find_element_by_xpath(".//td[15]").get_attribute("innerText")
-                # setValue(self, nowPopulation, "nowPopulation")
-                #
-                # loader = loadCoronaItem(self, response)
-                # yield loader.load_item()
+                yesterdayDeathsPerMillion = yWebElem.find_element_by_xpath(".//td[12]").get_attribute("innerText")
+                setValue(self,yesterdayDeathsPerMillion,"yesterdayDeathsPerMillion")
+
+                yesterdayTotalTests = yWebElem.find_element_by_xpath(".//td[13]").get_attribute("innerText")
+                setValue(self,yesterdayTotalTests,"yesterdayTotalTests")
+
+                yesterdayTestsPerMillion = yWebElem.find_element_by_xpath(".//td[14]").get_attribute("innerText")
+                setValue(self, yesterdayTestsPerMillion,"yesterdayTestsPerMillion")
+
+                yesterdayPopulation = yWebElem.find_element_by_xpath(".//td[15]").get_attribute("innerText")
+                setValue(self,yesterdayPopulation,"yesterdayPopulation")
+
+                loader = loadYesterdayCoronaItem(self,response)
+                yield loader.load_item()
 
         except Exception as ex:
             print("exception => error click yesterday --- {0}".format(ex))

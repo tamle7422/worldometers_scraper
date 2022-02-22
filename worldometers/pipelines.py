@@ -9,19 +9,29 @@ import os,re
 from sys import platform
 from scrapy import signals
 from scrapy.exporters import CsvItemExporter
-from .items import NowCoronaItem
+from .items import NowCoronaItem,YesterdayCoronaItem
 from datetime import datetime
 
 class CoronavirusPipeline:
     def __init__(self):
-        self.coronaDir = "csv_files/virus"
-        self.coronaList = ["nowRank","nowCountry","nowTotalCases","nowNewCases","nowTotalDeaths","nowNewDeaths", \
+        self.nowCoronaDir = "csv_files/virus/now"
+        self.yesterdayCoronaDir = "csv_files/virus/yesterday"
+        self.nowCoronaList = ["nowRank","nowCountry","nowTotalCases","nowNewCases","nowTotalDeaths","nowNewDeaths", \
             "nowTotalRecovered","nowNewRecovered","nowActiveCases","nowSeriousCritical","nowCasesPerMillion", \
             "nowDeathsPerMillion","nowTotalTests","nowTestsPerMillion","nowPopulation"]
+        self.yesterdayCoronaList = ["yesterdayRank","yesterdayCountry","yesterdayTotalCases","yesterdayNewCases", \
+            "yesterdayTotalDeaths","yesterdayNewDeaths","yesterdayTotalRecovered","yesterdayNewRecovered", \
+            "yesterdayActiveCases","yesterdaySeriousCritical","yesterdayCasesPerMillion","yesterdayDeathsPerMillion", \
+            "yesterdayTotalTests","yesterdayTestsPerMillion","yesterdayPopulation"]
 
-        self.coronaWriter = ""
-        self.coronaFileName = ""
-        self.coronaExporter = ""
+        self.nowCoronaWriter = ""
+        self.yesterdayCoronaWriter = ""
+
+        self.nowCoronaFileName = ""
+        self.yesterdayCoronaFileName = ""
+
+        self.nowCoronaExporter = ""
+        self.yesterdayCoronaExporter = ""
 
     @classmethod
     def from_crawler(cls,crawler):
@@ -38,26 +48,45 @@ class CoronavirusPipeline:
         today = datetime.today()
         dt = datetime(today.year,today.month,today.day)
 
-        self.coronaFileName = "now_corona_" + self.checkMonthDay(dt.month) + "_" + self.checkMonthDay(dt.day) + "_" \
+        self.nowCoronaFileName = "now_corona_" + self.checkMonthDay(dt.month) + "_" + self.checkMonthDay(dt.day) + "_" \
+            + str(dt.year) + ".csv"
+        self.yesterdayCoronaFileName = "yesterday_corona_" + self.checkMonthDay(dt.month) + "_" + self.checkMonthDay(dt.day) + "_" \
             + str(dt.year) + ".csv"
 
-        absolutePathCorona = os.path.join(os.getcwd(),self.coronaDir)
+        absolutePathNowCorona = os.path.join(os.getcwd(),self.nowCoronaDir)
+        absolutePathYesterdayCorona = os.path.join(os.getcwd(),self.yesterdayCoronaDir)
 
-        self.coronaWriter = open(os.path.join(absolutePathCorona,self.coronaFileName),"wb+")
-        self.coronaExporter = CsvItemExporter(self.coronaWriter)
-        self.coronaExporter.fields_to_export = self.coronaList
-        self.coronaExporter.start_exporting()
+        self.nowCoronaWriter = open(os.path.join(absolutePathNowCorona,self.nowCoronaFileName),"wb+")
+        self.yesterdayCoronaWriter = open(os.path.join(absolutePathYesterdayCorona,self.yesterdayCoronaFileName),"wb+")
+
+        self.nowCoronaExporter = CsvItemExporter(self.nowCoronaWriter)
+        self.yesterdayCoronaExporter = CsvItemExporter(self.yesterdayCoronaWriter)
+
+        self.nowCoronaExporter.fields_to_export = self.nowCoronaList
+        self.yesterdayCoronaExporter.fields_to_export = self.yesterdayCoronaList
+
+        self.nowCoronaExporter.start_exporting()
+        self.yesterdayCoronaExporter.start_exporting()
 
     def spider_closed(self,spider):
-        self.coronaExporter.finish_exporting()
-        self.coronaWriter.close()
+        self.nowCoronaExporter.finish_exporting()
+        self.yesterdayCoronaExporter.finish_exporting()
+
+        self.nowCoronaWriter.close()
+        self.yesterdayCoronaWriter.close()
 
     def process_item(self,item,spider):
         if (isinstance(item,NowCoronaItem)):
             if (len(item) == 0):
                 return item
             else:
-                self.coronaExporter.export_item(item)
+                self.nowCoronaExporter.export_item(item)
+                return item
+        elif (isinstance(item,YesterdayCoronaItem)):
+            if (len(item) == 0):
+                return item
+            else:
+                self.yesterdayCoronaExporter.export_item(item)
                 return item
 
     def checkMonthDay(self,dayOrMonth):
