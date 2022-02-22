@@ -3,7 +3,7 @@ import scrapy
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from ..hf_worldometers import checkEmpty,setNowTotalCases,setNowNewCases,setNowTotalDeaths,setNowNewDeaths, \
-    setNowTotalRecovered,setNowNewRecovered,setNowActiveCases,setValue,loadCoronaItem
+    setNowTotalRecovered,setNowNewRecovered,setNowActiveCases,setValue,loadNowCoronaItem
 
 # using selenium
 class CoronavirusSpider(scrapy.Spider):
@@ -37,6 +37,22 @@ class CoronavirusSpider(scrapy.Spider):
         self.nowTestsPerMillion = ""
         self.nowPopulation = ""
 
+        self.yesterdayRank = ""
+        self.yesterdayCountry = ""
+        self.yesterdayTotalCases = ""
+        self.yesterdayNewCases = ""
+        self.yesterdayTotalDeaths = ""
+        self.yesterdayNewDeaths = ""
+        self.yesterdayTotalRecovered = ""
+        self.yesterdayNewRecovered = ""
+        self.yesterdayActiveCases = ""
+        self.yesterdaySeriousCritical = ""
+        self.yesterdayCasesPerMillion = ""
+        self.yesterdayDeathsPerMillion = ""
+        self.yesterdayTotalTests = ""
+        self.yesterdayTestsPerMillion = ""
+        self.yesterdayPopulation = ""
+
         self.options = Options()
         print(os.getcwd())
         self.path = os.path.join(os.getcwd(),"geckodriver.exe")
@@ -53,88 +69,125 @@ class CoronavirusSpider(scrapy.Spider):
 
         try:
             self.driver.execute_script("arguments[0].click();",nowButton)
-            trTagsNow = self.driver.find_elements_by_xpath("//table[contains(@id,'main_table_countries')]/tbody/tr[@class='odd' or @class='even']")
+            trTagsNow = self.driver.find_elements_by_xpath("//table[contains(@id,'main_table_countries_today')]/tbody/tr[@class='odd' or @class='even']")
 
-            for webElem in trTagsNow:
-                nowRank = checkEmpty(webElem.find_element_by_xpath(".//td[1]").get_attribute("innerText"))
-                if (nowRank != "None"):
-                    self.nowRank = nowRank
+            # for webElem in trTagsNow:
+            #     nowRank = checkEmpty(webElem.find_element_by_xpath(".//td[1]").get_attribute("innerText"))
+            #     if (nowRank != "None"):
+            #         self.nowRank = nowRank
+            #     else:
+            #         self.nowRank = "None"
+            #
+            #     nowCountry = webElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
+            #     if (nowCountry != "None"):
+            #         self.nowCountry = nowCountry
+            #     else:
+            #         self.nowCountry = "None"
+            #
+            #     nowTotalCases = webElem.find_element_by_xpath(".//td[3]").get_attribute("innerText")
+            #     setNowTotalCases(self,nowTotalCases)
+            #
+            #     nowNewCases = webElem.find_element_by_xpath(".//td[4]").get_attribute("innerText")
+            #     setNowNewCases(self,nowNewCases)
+            #
+            #     nowTotalDeaths = webElem.find_element_by_xpath(".//td[5]").get_attribute("innerText")
+            #     setNowTotalDeaths(self,nowTotalDeaths)
+            #
+            #     nowNewDeaths = webElem.find_element_by_xpath(".//td[6]").get_attribute("innerText")
+            #     setNowNewDeaths(self,nowNewDeaths)
+            #
+            #     nowTotalRecovered = webElem.find_element_by_xpath(".//td[7]").get_attribute("innerText")
+            #     setNowTotalRecovered(self, nowTotalRecovered)
+            #
+            #     nowNewRecovered = webElem.find_element_by_xpath(".//td[8]").get_attribute("innerText")
+            #     setNowNewRecovered(self,nowNewRecovered)
+            #
+            #     nowActiveCases = webElem.find_element_by_xpath(".//td[9]").get_attribute("innerText")
+            #     setNowActiveCases(self,nowActiveCases)
+            #
+            #     nowSeriousCritical = webElem.find_element_by_xpath(".//td[10]").get_attribute("innerText")
+            #     setValue(self,nowSeriousCritical,"nowSeriousCritical")
+            #
+            #     nowCasesPerMillion = webElem.find_element_by_xpath(".//td[11]").get_attribute("innerText")
+            #     setValue(self,nowCasesPerMillion,"nowCasesPerMillion")
+            #
+            #     nowDeathsPerMillion = webElem.find_element_by_xpath(".//td[12]").get_attribute("innerText")
+            #     setValue(self,nowDeathsPerMillion,"nowDeathsPerMillion")
+            #
+            #     nowTotalTests = webElem.find_element_by_xpath(".//td[13]").get_attribute("innerText")
+            #     setValue(self,nowTotalTests,"nowTotalTests")
+            #
+            #     nowTestsPerMillion = webElem.find_element_by_xpath(".//td[14]").get_attribute("innerText")
+            #     setValue(self,nowTestsPerMillion,"nowTestsPerMillion")
+            #
+            #     nowPopulation = webElem.find_element_by_xpath(".//td[15]").get_attribute("innerText")
+            #     setValue(self,nowPopulation,"nowPopulation")
+            #
+            #     loader = loadNowCoronaItem(self,response)
+            #     yield loader.load_item()
+
+            self.driver.execute_script("arguments[0].click();",yesterdayButton)
+            trTagsYesterday = self.driver.find_elements_by_xpath("//table[contains(@id,'main_table_countries_yesterday')]/tbody/tr[@class='odd' or @class='even']")
+
+            for yWebElem in trTagsYesterday:
+                yesterdayRank = checkEmpty(yWebElem.find_element_by_xpath(".//td[1]").get_attribute("innerText"))
+                if (yesterdayRank != "None"):
+                    self.yesterdayRank = yesterdayRank
                 else:
-                    self.nowRank = "None"
+                    self.yesterdayRank = "None"
 
-                nowCountry = webElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
-                if (nowCountry != "None"):
-                    self.nowCountry = nowCountry
+                yesterdayCountry = yWebElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
+                if (yesterdayCountry != "None"):
+                    self.yesterdayCountry = yesterdayCountry
                 else:
-                    self.nowCountry = "None"
+                    self.yesterdayCountry = "None"
 
-                nowTotalCases = webElem.find_element_by_xpath(".//td[3]").get_attribute("innerText")
-                setNowTotalCases(self,nowTotalCases)
+                yesterdayTotalCases = yWebElem.find_element_by_xpath(".//td[3]").get_attribute("innerText")
+                setValue(self,yesterdayTotalCases,"yesterdayTotalCases")
 
-                nowNewCases = webElem.find_element_by_xpath(".//td[4]").get_attribute("innerText")
-                setNowNewCases(self,nowNewCases)
+                yesterdayNewCases = yWebElem.find_element_by_xpath(".//td[4]").get_attribute("innerText")
+                setValue(self,yesterdayNewCases,"yesterdayNewCases")
 
-                nowTotalDeaths = webElem.find_element_by_xpath(".//td[5]").get_attribute("innerText")
-                setNowTotalDeaths(self,nowTotalDeaths)
+                yesterdayTotalDeaths = yWebElem.find_element_by_xpath(".//td[5]").get_attribute("innerText")
+                setValue(self,yesterdayTotalDeaths,"yesterdayTotalDeaths")
 
-                nowNewDeaths = webElem.find_element_by_xpath(".//td[6]").get_attribute("innerText")
-                setNowNewDeaths(self,nowNewDeaths)
+                yesterdayNewDeaths = yWebElem.find_element_by_xpath(".//td[6]").get_attribute("innerText")
+                setValue(self,yesterdayNewDeaths,"yesterdayNewDeaths")
 
-                nowTotalRecovered = webElem.find_element_by_xpath(".//td[7]").get_attribute("innerText")
-                setNowTotalRecovered(self, nowTotalRecovered)
+                yesterdayTotalRecovered = yWebElem.find_element_by_xpath(".//td[7]").get_attribute("innerText")
+                setValue(self,yesterdayTotalRecovered,"yesterdayTotalRecovered")
 
-                nowNewRecovered = webElem.find_element_by_xpath(".//td[8]").get_attribute("innerText")
-                setNowNewRecovered(self,nowNewRecovered)
+                yesterdayNewRecovered = yWebElem.find_element_by_xpath(".//td[8]").get_attribute("innerText")
+                setValue(self,yesterdayNewRecovered,"yesterdayNewRecovered")
 
-                nowActiveCases = webElem.find_element_by_xpath(".//td[9]").get_attribute("innerText")
-                setNowActiveCases(self,nowActiveCases)
-
-                nowSeriousCritical = webElem.find_element_by_xpath(".//td[10]").get_attribute("innerText")
-                setValue(self,nowSeriousCritical,"nowSeriousCritical")
-
-                nowCasesPerMillion = webElem.find_element_by_xpath(".//td[11]").get_attribute("innerText")
-                setValue(self,nowCasesPerMillion,"nowCasesPerMillion")
-
-                nowDeathsPerMillion = webElem.find_element_by_xpath(".//td[12]").get_attribute("innerText")
-                setValue(self,nowDeathsPerMillion,"nowDeathsPerMillion")
-
-                nowTotalTests = webElem.find_element_by_xpath(".//td[13]").get_attribute("innerText")
-                setValue(self,nowTotalTests,"nowTotalTests")
-
-                nowTestsPerMillion = webElem.find_element_by_xpath(".//td[14]").get_attribute("innerText")
-                setValue(self,nowTestsPerMillion,"nowTestsPerMillion")
-
-                nowPopulation = webElem.find_element_by_xpath(".//td[15]").get_attribute("innerText")
-                setValue(self,nowPopulation,"nowPopulation")
-
-                loader = loadCoronaItem(self,response)
-                yield loader.load_item()
-
-            self.driver.execute_script("arguments[0].click();", yesterdayButton)
-            trTagsYesterday = self.driver.find_elements_by_xpath("//table[contains(@id,'main_table_countries')]/tbody/tr[@class='odd' or @class='even']")
-
-            for webElem in trTagsYesterday:
-                nowRank = checkEmpty(webElem.find_element_by_xpath(".//td[1]").get_attribute("innerText"))
-                if (nowRank != "None"):
-                    self.nowRank = nowRank
-                else:
-                    self.nowRank = "None"
-
-                nowCountry = webElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
-                if (nowCountry != "None"):
-                    self.nowCountry = nowCountry
-                else:
-                    self.nowCountry = "None"
 
                 print("")
+
+
+                # nowActiveCases = webElem.find_element_by_xpath(".//td[9]").get_attribute("innerText")
+                # setNowActiveCases(self, nowActiveCases)
+                #
+                # nowSeriousCritical = webElem.find_element_by_xpath(".//td[10]").get_attribute("innerText")
+                # setValue(self, nowSeriousCritical, "nowSeriousCritical")
+                #
+                # nowCasesPerMillion = webElem.find_element_by_xpath(".//td[11]").get_attribute("innerText")
+                # setValue(self, nowCasesPerMillion, "nowCasesPerMillion")
+                #
+                # nowDeathsPerMillion = webElem.find_element_by_xpath(".//td[12]").get_attribute("innerText")
+                # setValue(self, nowDeathsPerMillion, "nowDeathsPerMillion")
+                #
+                # nowTotalTests = webElem.find_element_by_xpath(".//td[13]").get_attribute("innerText")
+                # setValue(self, nowTotalTests, "nowTotalTests")
+                #
+                # nowTestsPerMillion = webElem.find_element_by_xpath(".//td[14]").get_attribute("innerText")
+                # setValue(self, nowTestsPerMillion, "nowTestsPerMillion")
+                #
+                # nowPopulation = webElem.find_element_by_xpath(".//td[15]").get_attribute("innerText")
+                # setValue(self, nowPopulation, "nowPopulation")
+                #
+                # loader = loadCoronaItem(self, response)
+                # yield loader.load_item()
 
         except Exception as ex:
             print("exception => error click yesterday --- {0}".format(ex))
             self.driver.quit()
-
-
-        # page = response.url.split("/")[-2]
-        # filename = f'quotes-{page}.html'
-        # with open(filename, 'wb') as f:
-        #     f.write(response.body)
-        # self.log(f'Saved file {filename}')

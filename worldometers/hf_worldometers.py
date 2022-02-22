@@ -2,7 +2,7 @@ import re
 import pickle
 from datetime import datetime
 from scrapy.loader import ItemLoader
-from .items import CoronaItem
+from .items import NowCoronaItem
 
 def getTime():
     now = datetime.now()
@@ -98,24 +98,24 @@ def setValue(self,value,type):
         print("exception => error setting {0} --- {1}".format(type,ex))
         setattr(self,type,"None")
 
-def loadCoronaItem(self,response):
-    self.nowRank = self.nowRank if (self.nowRank != "") else "None"
-    self.nowCountry = self.nowCountry if (self.nowCountry != "") else "None"
-    self.nowTotalCases = self.nowTotalCases if (self.nowTotalCases != "") else "None"
-    self.nowNewCases = self.nowNewCases if (self.nowNewCases != "") else "None"
-    self.nowTotalDeaths = self.nowTotalDeaths if (self.nowTotalDeaths != "") else "None"
-    self.nowNewDeaths = self.nowNewDeaths if (self.nowNewDeaths != "") else "None"
-    self.nowTotalRecovered = self.nowTotalRecovered if (self.nowTotalRecovered != "") else "None"
-    self.nowNewRecovered = self.nowNewRecovered if (self.nowNewRecovered != "") else "None"
-    self.nowActiveCases = self.nowActiveCases if (self.nowActiveCases != "") else "None"
-    self.nowSeriousCritical = self.nowSeriousCritical if (self.nowSeriousCritical != "") else "None"
-    self.nowCasesPerMillion = self.nowCasesPerMillion if (self.nowCasesPerMillion != "") else "None"
-    self.nowDeathsPerMillion = self.nowDeathsPerMillion if (self.nowDeathsPerMillion != "") else "None"
-    self.nowTotalTests = self.nowTotalTests if (self.nowTotalTests != "") else "None"
-    self.nowTestsPerMillion = self.nowTestsPerMillion if (self.nowTestsPerMillion != "") else "None"
-    self.nowPopulation = self.nowPopulation if (self.nowPopulation != "") else "None"
+def loadNowCoronaItem(self,response):
+    self.nowRank = self.nowRank if (len(self.nowRank) != 0) else "None"
+    self.nowCountry = self.nowCountry if (len(self.nowCountry) != 0) else "None"
+    self.nowTotalCases = self.nowTotalCases if (len(self.nowTotalCases) != 0) else "None"
+    self.nowNewCases = self.nowNewCases if (len(self.nowNewCases) != 0) else "None"
+    self.nowTotalDeaths = self.nowTotalDeaths if (len(self.nowTotalDeaths) != 0) else "None"
+    self.nowNewDeaths = self.nowNewDeaths if (len(self.nowNewDeaths) != 0) else "None"
+    self.nowTotalRecovered = self.nowTotalRecovered if (len(self.nowTotalRecovered) != 0) else "None"
+    self.nowNewRecovered = self.nowNewRecovered if (len(self.nowNewRecovered) != 0) else "None"
+    self.nowActiveCases = self.nowActiveCases if (len(self.nowActiveCases) != 0) else "None"
+    self.nowSeriousCritical = self.nowSeriousCritical if (len(self.nowSeriousCritical) != 0) else "None"
+    self.nowCasesPerMillion = self.nowCasesPerMillion if (len(self.nowCasesPerMillion) != 0) else "None"
+    self.nowDeathsPerMillion = self.nowDeathsPerMillion if (len(self.nowDeathsPerMillion) != 0) else "None"
+    self.nowTotalTests = self.nowTotalTests if (len(self.nowTotalTests) != 0) else "None"
+    self.nowTestsPerMillion = self.nowTestsPerMillion if (len(self.nowTestsPerMillion) != 0) else "None"
+    self.nowPopulation = self.nowPopulation if (len(self.nowPopulation) != 0) else "None"
 
-    loader = ItemLoader(item=CoronaItem(),response=response)
+    loader = ItemLoader(item=NowCoronaItem(),response=response)
     loader.add_value("nowRank",self.nowRank)
     loader.add_value("nowCountry",self.nowCountry)
     loader.add_value("nowTotalCases",self.nowTotalCases)

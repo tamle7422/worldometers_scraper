@@ -9,7 +9,7 @@ import os,re
 from sys import platform
 from scrapy import signals
 from scrapy.exporters import CsvItemExporter
-from .items import CoronaItem
+from .items import NowCoronaItem
 from datetime import datetime
 
 class CoronavirusPipeline:
@@ -38,7 +38,7 @@ class CoronavirusPipeline:
         today = datetime.today()
         dt = datetime(today.year,today.month,today.day)
 
-        self.coronaFileName = "corona_" + self.checkMonthDay(dt.month) + "_" + self.checkMonthDay(dt.day) + "_" \
+        self.coronaFileName = "now_corona_" + self.checkMonthDay(dt.month) + "_" + self.checkMonthDay(dt.day) + "_" \
             + str(dt.year) + ".csv"
 
         absolutePathCorona = os.path.join(os.getcwd(),self.coronaDir)
@@ -53,7 +53,7 @@ class CoronavirusPipeline:
         self.coronaWriter.close()
 
     def process_item(self,item,spider):
-        if (isinstance(item,CoronaItem)):
+        if (isinstance(item,NowCoronaItem)):
             if (len(item) == 0):
                 return item
             else:

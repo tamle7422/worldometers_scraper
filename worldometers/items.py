@@ -5,7 +5,7 @@
 
 import scrapy
 
-class CoronaItem(scrapy.Item):
+class NowCoronaItem(scrapy.Item):
     nowRank = scrapy.Field()
     nowCountry = scrapy.Field()
     nowTotalCases = scrapy.Field()
