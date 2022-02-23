@@ -1,4 +1,4 @@
-import os
+import os,re
 import scrapy
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -125,22 +125,39 @@ class CoronavirusSpider(scrapy.Spider):
             #
             #     loader = loadNowCoronaItem(self,response)
             #     yield loader.load_item()
+        except Exception as ex:
+            print("exception => error click today --- {0}".format(ex))
 
+
+        try:
             self.driver.execute_script("arguments[0].click();",yesterdayButton)
             trTagsYesterday = self.driver.find_elements_by_xpath("//table[contains(@id,'main_table_countries_yesterday')]/tbody/tr[@class='odd' or @class='even']")
 
             for yWebElem in trTagsYesterday:
+                # unwanted tags
+                if (len(yWebElem.text) == 0):
+                    continue
+
                 yesterdayRank = checkEmpty(yWebElem.find_element_by_xpath(".//td[1]").get_attribute("innerText"))
                 if (yesterdayRank != "None"):
                     self.yesterdayRank = yesterdayRank
                 else:
                     self.yesterdayRank = "None"
 
-                yesterdayCountry = yWebElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
-                if (yesterdayCountry != "None"):
-                    self.yesterdayCountry = yesterdayCountry
-                else:
-                    self.yesterdayCountry = "None"
+                # some countries have a or span tags
+                try:
+                    yesterdayCountry = yWebElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
+                    if (yesterdayCountry != "None"):
+                        self.yesterdayCountry = yesterdayCountry
+                    else:
+                        self.yesterdayCountry = "None"
+
+                except:
+                    yesterdayCountry = yWebElem.find_element_by_xpath(".//td[2]/span").get_attribute("innerText")
+                    if (yesterdayCountry != "None"):
+                        self.yesterdayCountry = yesterdayCountry
+                    else:
+                        self.yesterdayCountry = "None"
 
                 yesterdayTotalCases = yWebElem.find_element_by_xpath(".//td[3]").get_attribute("innerText")
                 setValue(self,yesterdayTotalCases,"yesterdayTotalCases")
@@ -186,4 +203,5 @@ class CoronavirusSpider(scrapy.Spider):
 
         except Exception as ex:
             print("exception => error click yesterday --- {0}".format(ex))
-            self.driver.quit()
+
+        self.driver.quit()
