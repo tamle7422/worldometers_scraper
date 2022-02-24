@@ -71,137 +71,151 @@ class CoronavirusSpider(scrapy.Spider):
             self.driver.execute_script("arguments[0].click();",nowButton)
             trTagsNow = self.driver.find_elements_by_xpath("//table[contains(@id,'main_table_countries_today')]/tbody/tr[@class='odd' or @class='even']")
 
-            # for webElem in trTagsNow:
-            #     nowRank = checkEmpty(webElem.find_element_by_xpath(".//td[1]").get_attribute("innerText"))
-            #     if (nowRank != "None"):
-            #         self.nowRank = nowRank
-            #     else:
-            #         self.nowRank = "None"
-            #
-            #     nowCountry = webElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
-            #     if (nowCountry != "None"):
-            #         self.nowCountry = nowCountry
-            #     else:
-            #         self.nowCountry = "None"
-            #
-            #     nowTotalCases = webElem.find_element_by_xpath(".//td[3]").get_attribute("innerText")
-            #     setNowTotalCases(self,nowTotalCases)
-            #
-            #     nowNewCases = webElem.find_element_by_xpath(".//td[4]").get_attribute("innerText")
-            #     setNowNewCases(self,nowNewCases)
-            #
-            #     nowTotalDeaths = webElem.find_element_by_xpath(".//td[5]").get_attribute("innerText")
-            #     setNowTotalDeaths(self,nowTotalDeaths)
-            #
-            #     nowNewDeaths = webElem.find_element_by_xpath(".//td[6]").get_attribute("innerText")
-            #     setNowNewDeaths(self,nowNewDeaths)
-            #
-            #     nowTotalRecovered = webElem.find_element_by_xpath(".//td[7]").get_attribute("innerText")
-            #     setNowTotalRecovered(self, nowTotalRecovered)
-            #
-            #     nowNewRecovered = webElem.find_element_by_xpath(".//td[8]").get_attribute("innerText")
-            #     setNowNewRecovered(self,nowNewRecovered)
-            #
-            #     nowActiveCases = webElem.find_element_by_xpath(".//td[9]").get_attribute("innerText")
-            #     setNowActiveCases(self,nowActiveCases)
-            #
-            #     nowSeriousCritical = webElem.find_element_by_xpath(".//td[10]").get_attribute("innerText")
-            #     setValue(self,nowSeriousCritical,"nowSeriousCritical")
-            #
-            #     nowCasesPerMillion = webElem.find_element_by_xpath(".//td[11]").get_attribute("innerText")
-            #     setValue(self,nowCasesPerMillion,"nowCasesPerMillion")
-            #
-            #     nowDeathsPerMillion = webElem.find_element_by_xpath(".//td[12]").get_attribute("innerText")
-            #     setValue(self,nowDeathsPerMillion,"nowDeathsPerMillion")
-            #
-            #     nowTotalTests = webElem.find_element_by_xpath(".//td[13]").get_attribute("innerText")
-            #     setValue(self,nowTotalTests,"nowTotalTests")
-            #
-            #     nowTestsPerMillion = webElem.find_element_by_xpath(".//td[14]").get_attribute("innerText")
-            #     setValue(self,nowTestsPerMillion,"nowTestsPerMillion")
-            #
-            #     nowPopulation = webElem.find_element_by_xpath(".//td[15]").get_attribute("innerText")
-            #     setValue(self,nowPopulation,"nowPopulation")
-            #
-            #     loader = loadNowCoronaItem(self,response)
-            #     yield loader.load_item()
+            for nWebElem in trTagsNow:
+                # unwanted tags
+                if (len(nWebElem.text) == 0):
+                    continue
+
+                nowRank = checkEmpty(nWebElem.find_element_by_xpath(".//td[1]").get_attribute("innerText"))
+                if (nowRank != "None"):
+                    self.nowRank = nowRank
+                else:
+                    self.nowRank = "None"
+
+                # some countries have a or span tags
+                try:
+                    nowCountry = nWebElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
+                    if (nowCountry != "None"):
+                        self.nowCountry = nowCountry
+                    else:
+                        self.nowCountry = "None"
+
+                except:
+                    nowCountry = nWebElem.find_element_by_xpath(".//td[2]/span").get_attribute("innerText")
+                    if (nowCountry != "None"):
+                        self.nowCountry = nowCountry
+                    else:
+                        self.nowCountry = "None"
+
+                nowTotalCases = nWebElem.find_element_by_xpath(".//td[3]").get_attribute("innerText")
+                setNowTotalCases(self,nowTotalCases)
+
+                nowNewCases = nWebElem.find_element_by_xpath(".//td[4]").get_attribute("innerText")
+                setNowNewCases(self,nowNewCases)
+
+                nowTotalDeaths = nWebElem.find_element_by_xpath(".//td[5]").get_attribute("innerText")
+                setNowTotalDeaths(self,nowTotalDeaths)
+
+                nowNewDeaths = nWebElem.find_element_by_xpath(".//td[6]").get_attribute("innerText")
+                setNowNewDeaths(self,nowNewDeaths)
+
+                nowTotalRecovered = nWebElem.find_element_by_xpath(".//td[7]").get_attribute("innerText")
+                setNowTotalRecovered(self, nowTotalRecovered)
+
+                nowNewRecovered = nWebElem.find_element_by_xpath(".//td[8]").get_attribute("innerText")
+                setNowNewRecovered(self,nowNewRecovered)
+
+                nowActiveCases = nWebElem.find_element_by_xpath(".//td[9]").get_attribute("innerText")
+                setNowActiveCases(self,nowActiveCases)
+
+                nowSeriousCritical = nWebElem.find_element_by_xpath(".//td[10]").get_attribute("innerText")
+                setValue(self,nowSeriousCritical,"nowSeriousCritical")
+
+                nowCasesPerMillion = nWebElem.find_element_by_xpath(".//td[11]").get_attribute("innerText")
+                setValue(self,nowCasesPerMillion,"nowCasesPerMillion")
+
+                nowDeathsPerMillion = nWebElem.find_element_by_xpath(".//td[12]").get_attribute("innerText")
+                setValue(self,nowDeathsPerMillion,"nowDeathsPerMillion")
+
+                nowTotalTests = nWebElem.find_element_by_xpath(".//td[13]").get_attribute("innerText")
+                setValue(self,nowTotalTests,"nowTotalTests")
+
+                nowTestsPerMillion = nWebElem.find_element_by_xpath(".//td[14]").get_attribute("innerText")
+                setValue(self,nowTestsPerMillion,"nowTestsPerMillion")
+
+                nowPopulation = nWebElem.find_element_by_xpath(".//td[15]").get_attribute("innerText")
+                setValue(self,nowPopulation,"nowPopulation")
+
+                loader = loadNowCoronaItem(self,response)
+                yield loader.load_item()
+
         except Exception as ex:
             print("exception => error click today --- {0}".format(ex))
 
 
-        try:
-            self.driver.execute_script("arguments[0].click();",yesterdayButton)
-            trTagsYesterday = self.driver.find_elements_by_xpath("//table[contains(@id,'main_table_countries_yesterday')]/tbody/tr[@class='odd' or @class='even']")
-
-            for yWebElem in trTagsYesterday:
-                # unwanted tags
-                if (len(yWebElem.text) == 0):
-                    continue
-
-                yesterdayRank = checkEmpty(yWebElem.find_element_by_xpath(".//td[1]").get_attribute("innerText"))
-                if (yesterdayRank != "None"):
-                    self.yesterdayRank = yesterdayRank
-                else:
-                    self.yesterdayRank = "None"
-
-                # some countries have a or span tags
-                try:
-                    yesterdayCountry = yWebElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
-                    if (yesterdayCountry != "None"):
-                        self.yesterdayCountry = yesterdayCountry
-                    else:
-                        self.yesterdayCountry = "None"
-
-                except:
-                    yesterdayCountry = yWebElem.find_element_by_xpath(".//td[2]/span").get_attribute("innerText")
-                    if (yesterdayCountry != "None"):
-                        self.yesterdayCountry = yesterdayCountry
-                    else:
-                        self.yesterdayCountry = "None"
-
-                yesterdayTotalCases = yWebElem.find_element_by_xpath(".//td[3]").get_attribute("innerText")
-                setValue(self,yesterdayTotalCases,"yesterdayTotalCases")
-
-                yesterdayNewCases = yWebElem.find_element_by_xpath(".//td[4]").get_attribute("innerText")
-                setValue(self,yesterdayNewCases,"yesterdayNewCases")
-
-                yesterdayTotalDeaths = yWebElem.find_element_by_xpath(".//td[5]").get_attribute("innerText")
-                setValue(self,yesterdayTotalDeaths,"yesterdayTotalDeaths")
-
-                yesterdayNewDeaths = yWebElem.find_element_by_xpath(".//td[6]").get_attribute("innerText")
-                setValue(self,yesterdayNewDeaths,"yesterdayNewDeaths")
-
-                yesterdayTotalRecovered = yWebElem.find_element_by_xpath(".//td[7]").get_attribute("innerText")
-                setValue(self,yesterdayTotalRecovered,"yesterdayTotalRecovered")
-
-                yesterdayNewRecovered = yWebElem.find_element_by_xpath(".//td[8]").get_attribute("innerText")
-                setValue(self,yesterdayNewRecovered,"yesterdayNewRecovered")
-
-                yesterdayActiveCases = yWebElem.find_element_by_xpath(".//td[9]").get_attribute("innerText")
-                setValue(self,yesterdayActiveCases,"yesterdayActiveCases")
-
-                yesterdaySeriousCritical = yWebElem.find_element_by_xpath(".//td[10]").get_attribute("innerText")
-                setValue(self,yesterdaySeriousCritical,"yesterdaySeriousCritical")
-
-                yesterdayCasesPerMillion = yWebElem.find_element_by_xpath(".//td[11]").get_attribute("innerText")
-                setValue(self,yesterdayCasesPerMillion,"yesterdayCasesPerMillion")
-
-                yesterdayDeathsPerMillion = yWebElem.find_element_by_xpath(".//td[12]").get_attribute("innerText")
-                setValue(self,yesterdayDeathsPerMillion,"yesterdayDeathsPerMillion")
-
-                yesterdayTotalTests = yWebElem.find_element_by_xpath(".//td[13]").get_attribute("innerText")
-                setValue(self,yesterdayTotalTests,"yesterdayTotalTests")
-
-                yesterdayTestsPerMillion = yWebElem.find_element_by_xpath(".//td[14]").get_attribute("innerText")
-                setValue(self, yesterdayTestsPerMillion,"yesterdayTestsPerMillion")
-
-                yesterdayPopulation = yWebElem.find_element_by_xpath(".//td[15]").get_attribute("innerText")
-                setValue(self,yesterdayPopulation,"yesterdayPopulation")
-
-                loader = loadYesterdayCoronaItem(self,response)
-                yield loader.load_item()
-
-        except Exception as ex:
-            print("exception => error click yesterday --- {0}".format(ex))
+        # try:
+        #     self.driver.execute_script("arguments[0].click();",yesterdayButton)
+        #     trTagsYesterday = self.driver.find_elements_by_xpath("//table[contains(@id,'main_table_countries_yesterday')]/tbody/tr[@class='odd' or @class='even']")
+        #
+        #     for yWebElem in trTagsYesterday:
+        #         # unwanted tags
+        #         if (len(yWebElem.text) == 0):
+        #             continue
+        #
+        #         yesterdayRank = checkEmpty(yWebElem.find_element_by_xpath(".//td[1]").get_attribute("innerText"))
+        #         if (yesterdayRank != "None"):
+        #             self.yesterdayRank = yesterdayRank
+        #         else:
+        #             self.yesterdayRank = "None"
+        #
+        #         # some countries have a or span tags
+        #         try:
+        #             yesterdayCountry = yWebElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
+        #             if (yesterdayCountry != "None"):
+        #                 self.yesterdayCountry = yesterdayCountry
+        #             else:
+        #                 self.yesterdayCountry = "None"
+        #
+        #         except:
+        #             yesterdayCountry = yWebElem.find_element_by_xpath(".//td[2]/span").get_attribute("innerText")
+        #             if (yesterdayCountry != "None"):
+        #                 self.yesterdayCountry = yesterdayCountry
+        #             else:
+        #                 self.yesterdayCountry = "None"
+        #
+        #         yesterdayTotalCases = yWebElem.find_element_by_xpath(".//td[3]").get_attribute("innerText")
+        #         setValue(self,yesterdayTotalCases,"yesterdayTotalCases")
+        #
+        #         yesterdayNewCases = yWebElem.find_element_by_xpath(".//td[4]").get_attribute("innerText")
+        #         setValue(self,yesterdayNewCases,"yesterdayNewCases")
+        #
+        #         yesterdayTotalDeaths = yWebElem.find_element_by_xpath(".//td[5]").get_attribute("innerText")
+        #         setValue(self,yesterdayTotalDeaths,"yesterdayTotalDeaths")
+        #
+        #         yesterdayNewDeaths = yWebElem.find_element_by_xpath(".//td[6]").get_attribute("innerText")
+        #         setValue(self,yesterdayNewDeaths,"yesterdayNewDeaths")
+        #
+        #         yesterdayTotalRecovered = yWebElem.find_element_by_xpath(".//td[7]").get_attribute("innerText")
+        #         setValue(self,yesterdayTotalRecovered,"yesterdayTotalRecovered")
+        #
+        #         yesterdayNewRecovered = yWebElem.find_element_by_xpath(".//td[8]").get_attribute("innerText")
+        #         setValue(self,yesterdayNewRecovered,"yesterdayNewRecovered")
+        #
+        #         yesterdayActiveCases = yWebElem.find_element_by_xpath(".//td[9]").get_attribute("innerText")
+        #         setValue(self,yesterdayActiveCases,"yesterdayActiveCases")
+        #
+        #         yesterdaySeriousCritical = yWebElem.find_element_by_xpath(".//td[10]").get_attribute("innerText")
+        #         setValue(self,yesterdaySeriousCritical,"yesterdaySeriousCritical")
+        #
+        #         yesterdayCasesPerMillion = yWebElem.find_element_by_xpath(".//td[11]").get_attribute("innerText")
+        #         setValue(self,yesterdayCasesPerMillion,"yesterdayCasesPerMillion")
+        #
+        #         yesterdayDeathsPerMillion = yWebElem.find_element_by_xpath(".//td[12]").get_attribute("innerText")
+        #         setValue(self,yesterdayDeathsPerMillion,"yesterdayDeathsPerMillion")
+        #
+        #         yesterdayTotalTests = yWebElem.find_element_by_xpath(".//td[13]").get_attribute("innerText")
+        #         setValue(self,yesterdayTotalTests,"yesterdayTotalTests")
+        #
+        #         yesterdayTestsPerMillion = yWebElem.find_element_by_xpath(".//td[14]").get_attribute("innerText")
+        #         setValue(self, yesterdayTestsPerMillion,"yesterdayTestsPerMillion")
+        #
+        #         yesterdayPopulation = yWebElem.find_element_by_xpath(".//td[15]").get_attribute("innerText")
+        #         setValue(self,yesterdayPopulation,"yesterdayPopulation")
+        #
+        #         loader = loadYesterdayCoronaItem(self,response)
+        #         yield loader.load_item()
+        #
+        # except Exception as ex:
+        #     print("exception => error click yesterday --- {0}".format(ex))
 
         self.driver.quit()
