@@ -53,21 +53,21 @@ class CoronavirusSpider(scrapy.Spider):
         self.yesterdayTestsPerMillion = ""
         self.yesterdayPopulation = ""
 
-        self._2DaysRank = ""
-        self._2DaysCountry = ""
-        self._2DaysTotalCases = ""
-        self._2DaysNewCases = ""
-        self._2DaysTotalDeaths = ""
-        self._2DaysNewDeaths = ""
-        self._2DaysTotalRecovered = ""
-        self._2DaysNewRecovered = ""
-        self._2DaysActiveCases = ""
-        self._2DaysSeriousCritical = ""
-        self._2DaysCasesPerMillion = ""
-        self._2DaysDeathsPerMillion = ""
-        self._2DaysTotalTests = ""
-        self._2DaysTestsPerMillion = ""
-        self._2DaysPopulation = ""
+        self.twoDaysRank = ""
+        self.twoDaysCountry = ""
+        self.twoDaysTotalCases = ""
+        self.twoDaysNewCases = ""
+        self.twoDaysTotalDeaths = ""
+        self.twoDaysNewDeaths = ""
+        self.twoDaysTotalRecovered = ""
+        self.twoDaysNewRecovered = ""
+        self.twoDaysActiveCases = ""
+        self.twoDaysSeriousCritical = ""
+        self.twoDaysCasesPerMillion = ""
+        self.twoDaysDeathsPerMillion = ""
+        self.twoDaysTotalTests = ""
+        self.twoDaysTestsPerMillion = ""
+        self.twoDaysPopulation = ""
 
         self.options = Options()
         print(os.getcwd())
@@ -238,61 +238,61 @@ class CoronavirusSpider(scrapy.Spider):
             self.driver.execute_script("arguments[0].click();",_2DaysButton)
             trTags2Days = self.driver.find_elements_by_xpath("//table[contains(@id,'main_table_countries_yesterday2')]/tbody/tr[@class='odd' or @class='even']")
 
-            for _2WebElem in trTags2Days:
+            for twoWebElem in trTags2Days:
                 # unwanted tags
-                if (len(_2WebElem.text) == 0):
+                if (len(twoWebElem.text) == 0):
                     continue
 
-                _2DaysRank = checkEmpty(_2WebElem.find_element_by_xpath(".//td[1]").get_attribute("innerText"))
-                if (_2DaysRank != "None"):
-                    self._2DaysRank = _2DaysRank
+                twoDaysRank = checkEmpty(twoWebElem.find_element_by_xpath(".//td[1]").get_attribute("innerText"))
+                if (twoDaysRank != "None"):
+                    self.twoDaysRank = twoDaysRank
                 else:
-                    self._2DaysRank = "None"
+                    self.twoDaysRank = "None"
 
                 # some countries have a or span tags
                 try:
-                    _2DaysCountry = _2WebElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
-                    if (_2DaysCountry != "None"):
-                        self._2DaysCountry = _2DaysCountry
+                    twoDaysCountry = twoWebElem.find_element_by_xpath(".//td[2]/a").get_attribute("innerText")
+                    if (twoDaysCountry != "None"):
+                        self.twoDaysCountry = twoDaysCountry
                     else:
-                        self._2DaysCountry = "None"
+                        self.twoDaysCountry = "None"
 
                 except:
-                    _2DaysCountry = _2WebElem.find_element_by_xpath(".//td[2]/span").get_attribute("innerText")
-                    if (_2DaysCountry != "None"):
-                        self._2DaysCountry = _2DaysCountry
+                    twoDaysCountry = twoWebElem.find_element_by_xpath(".//td[2]/span").get_attribute("innerText")
+                    if (twoDaysCountry != "None"):
+                        self.twoDaysCountry = twoDaysCountry
                     else:
-                        self._2DaysCountry = "None"
+                        self.twoDaysCountry = "None"
 
-                _2DaysTotalCases = _2WebElem.find_element_by_xpath(".//td[3]").get_attribute("innerText")
-                setValue(self,_2DaysTotalCases,"_2DaysTotalCases")
+                twoDaysTotalCases = twoWebElem.find_element_by_xpath(".//td[3]").get_attribute("innerText")
+                setValue(self,twoDaysTotalCases,"twoDaysTotalCases")
 
-                _2DaysNewCases = _2WebElem.find_element_by_xpath(".//td[4]").get_attribute("innerText")
-                setValue(self,_2DaysNewCases,"_2DaysNewCases")
+                twoDaysNewCases = twoWebElem.find_element_by_xpath(".//td[4]").get_attribute("innerText")
+                setValue(self,twoDaysNewCases,"twoDaysNewCases")
 
-                _2DaysTotalDeaths = _2WebElem.find_element_by_xpath(".//td[5]").get_attribute("innerText")
-                setValue(self,_2DaysTotalDeaths,"_2DaysTotalDeaths")
+                twoDaysTotalDeaths = twoWebElem.find_element_by_xpath(".//td[5]").get_attribute("innerText")
+                setValue(self,twoDaysTotalDeaths,"twoDaysTotalDeaths")
 
-                yesterdayNewDeaths = yWebElem.find_element_by_xpath(".//td[6]").get_attribute("innerText")
-                setValue(self, yesterdayNewDeaths, "yesterdayNewDeaths")
+                twoDaysNewDeaths = twoWebElem.find_element_by_xpath(".//td[6]").get_attribute("innerText")
+                setValue(self,twoDaysNewDeaths,"twoDaysNewDeaths")
 
-                yesterdayTotalRecovered = yWebElem.find_element_by_xpath(".//td[7]").get_attribute("innerText")
-                setValue(self, yesterdayTotalRecovered, "yesterdayTotalRecovered")
+                twoDaysTotalRecovered = twoWebElem.find_element_by_xpath(".//td[7]").get_attribute("innerText")
+                setValue(self,twoDaysTotalRecovered,"twoDaysTotalRecovered")
 
-                yesterdayNewRecovered = yWebElem.find_element_by_xpath(".//td[8]").get_attribute("innerText")
-                setValue(self, yesterdayNewRecovered, "yesterdayNewRecovered")
+                twoDaysNewRecovered = twoWebElem.find_element_by_xpath(".//td[8]").get_attribute("innerText")
+                setValue(self,twoDaysNewRecovered,"twoDaysNewRecovered")
 
-                yesterdayActiveCases = yWebElem.find_element_by_xpath(".//td[9]").get_attribute("innerText")
-                setValue(self, yesterdayActiveCases, "yesterdayActiveCases")
+                twoDaysActiveCases = twoWebElem.find_element_by_xpath(".//td[9]").get_attribute("innerText")
+                setValue(self,twoDaysActiveCases,"twoDaysActiveCases")
 
-                nowSeriousCritical = nWebElem.find_element_by_xpath(".//td[10]").get_attribute("innerText")
-                setValue(self,nowSeriousCritical,"nowSeriousCritical")
+                twoDaysSeriousCritical = twoWebElem.find_element_by_xpath(".//td[10]").get_attribute("innerText")
+                setValue(self,twoDaysSeriousCritical,"twoDaysSeriousCritical")
 
-                nowCasesPerMillion = nWebElem.find_element_by_xpath(".//td[11]").get_attribute("innerText")
-                setValue(self,nowCasesPerMillion,"nowCasesPerMillion")
+                twoDaysCasesPerMillion = twoWebElem.find_element_by_xpath(".//td[11]").get_attribute("innerText")
+                setValue(self,twoDaysCasesPerMillion,"twoDaysCasesPerMillion")
 
-                nowDeathsPerMillion = nWebElem.find_element_by_xpath(".//td[12]").get_attribute("innerText")
-                setValue(self,nowDeathsPerMillion,"nowDeathsPerMillion")
+                twoDaysDeathsPerMillion = twoWebElem.find_element_by_xpath(".//td[12]").get_attribute("innerText")
+                setValue(self,twoDaysDeathsPerMillion,"twoDaysDeathsPerMillion")
 
                 nowTotalTests = nWebElem.find_element_by_xpath(".//td[13]").get_attribute("innerText")
                 setValue(self,nowTotalTests,"nowTotalTests")
