@@ -9,13 +9,14 @@ import os,re
 from sys import platform
 from scrapy import signals
 from scrapy.exporters import CsvItemExporter
-from .items import NowCoronaItem,YesterdayCoronaItem
+from .items import NowCoronaItem,YesterdayCoronaItem,TwoDaysCoronaItem
 from datetime import datetime
 
 class CoronavirusPipeline:
     def __init__(self):
         self.nowCoronaDir = "csv_files/virus/now"
         self.yesterdayCoronaDir = "csv_files/virus/yesterday"
+        self.twoDaysCoronaDir = "csv_files/virus/two_days"
         self.nowCoronaList = ["nowRank","nowCountry","nowTotalCases","nowNewCases","nowTotalDeaths","nowNewDeaths", \
             "nowTotalRecovered","nowNewRecovered","nowActiveCases","nowSeriousCritical","nowCasesPerMillion", \
             "nowDeathsPerMillion","nowTotalTests","nowTestsPerMillion","nowPopulation"]
@@ -23,15 +24,22 @@ class CoronavirusPipeline:
             "yesterdayTotalDeaths","yesterdayNewDeaths","yesterdayTotalRecovered","yesterdayNewRecovered", \
             "yesterdayActiveCases","yesterdaySeriousCritical","yesterdayCasesPerMillion","yesterdayDeathsPerMillion", \
             "yesterdayTotalTests","yesterdayTestsPerMillion","yesterdayPopulation"]
+        self.twoDaysCoronaList = ["twoDaysRank","twoDaysCountry", "twoDaysTotalCases", "twoDaysNewCases", \
+            "twoDaysTotalDeaths","twoDaysNewDeaths","twoDaysTotalRecovered","twoDaysNewRecovered", \
+            "twoDaysActiveCases","twoDaysSeriousCritical","twoDaysCasesPerMillion","twoDaysDeathsPerMillion", \
+            "twoDaysTotalTests","twoDaysTestsPerMillion","twoDaysPopulation"]
 
         self.nowCoronaWriter = ""
         self.yesterdayCoronaWriter = ""
+        self.twoDaysCoronaWriter = ""
 
         self.nowCoronaFileName = ""
         self.yesterdayCoronaFileName = ""
+        self.twoDaysCoronaFileName = ""
 
         self.nowCoronaExporter = ""
         self.yesterdayCoronaExporter = ""
+        self.twoDaysCoronaExporter = ""
 
     @classmethod
     def from_crawler(cls,crawler):
@@ -52,28 +60,38 @@ class CoronavirusPipeline:
             + str(dt.year) + ".csv"
         self.yesterdayCoronaFileName = "yesterday_corona_" + self.checkMonthDay(dt.month) + "_" + self.checkMonthDay(dt.day) + "_" \
             + str(dt.year) + ".csv"
+        self.twoDaysCoronaFileName = "two_days_corona_" + self.checkMonthDay(dt.month) + "_" + self.checkMonthDay(dt.day) \
+            + "_" + str(dt.year) + ".csv"
 
         absolutePathNowCorona = os.path.join(os.getcwd(),self.nowCoronaDir)
         absolutePathYesterdayCorona = os.path.join(os.getcwd(),self.yesterdayCoronaDir)
+        absolutePathTwoDaysCorona = os.path.join(os.getcwd(),self.twoDaysCoronaDir)
 
         self.nowCoronaWriter = open(os.path.join(absolutePathNowCorona,self.nowCoronaFileName),"wb+")
         self.yesterdayCoronaWriter = open(os.path.join(absolutePathYesterdayCorona,self.yesterdayCoronaFileName),"wb+")
+        self.twoDaysCoronaWriter = open(os.path.join(absolutePathTwoDaysCorona,self.twoDaysCoronaFileName),"wb+")
+
 
         self.nowCoronaExporter = CsvItemExporter(self.nowCoronaWriter)
         self.yesterdayCoronaExporter = CsvItemExporter(self.yesterdayCoronaWriter)
+        self.twoDaysCoronaExporter = CsvItemExporter(self.twoDaysCoronaWriter)
 
         self.nowCoronaExporter.fields_to_export = self.nowCoronaList
         self.yesterdayCoronaExporter.fields_to_export = self.yesterdayCoronaList
+        self.twoDaysCoronaExporter.fields_to_export = self.twoDaysCoronaList
 
         self.nowCoronaExporter.start_exporting()
         self.yesterdayCoronaExporter.start_exporting()
+        self.twoDaysCoronaExporter.start_exporting()
 
     def spider_closed(self,spider):
         self.nowCoronaExporter.finish_exporting()
         self.yesterdayCoronaExporter.finish_exporting()
+        self.twoDaysCoronaExporter.finish_exporting()
 
         self.nowCoronaWriter.close()
         self.yesterdayCoronaWriter.close()
+        self.twoDaysCoronaWriter.close()
 
     def process_item(self,item,spider):
         if (isinstance(item,NowCoronaItem)):
@@ -87,6 +105,12 @@ class CoronavirusPipeline:
                 return item
             else:
                 self.yesterdayCoronaExporter.export_item(item)
+                return item
+        elif (isinstance(item,TwoDaysCoronaItem)):
+            if (len(item) == 0):
+                return item
+            else:
+                self.twoDaysCoronaExporter.export_item(item)
                 return item
 
     def checkMonthDay(self,dayOrMonth):

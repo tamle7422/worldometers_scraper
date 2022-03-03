@@ -2,7 +2,7 @@ import re
 import pickle
 from datetime import datetime
 from scrapy.loader import ItemLoader
-from .items import NowCoronaItem,YesterdayCoronaItem
+from .items import NowCoronaItem,YesterdayCoronaItem,TwoDaysCoronaItem
 
 def getTime():
     now = datetime.now()
@@ -168,6 +168,40 @@ def loadYesterdayCoronaItem(self,response):
     loader.add_value("yesterdayPopulation",self.yesterdayPopulation)
     return loader
 
+def loadTwoDaysCoronaItem(self,response):
+    self.twoDaysRank = self.twoDaysRank if (len(self.twoDaysRank) != 0) else "None"
+    self.twoDaysCountry = self.twoDaysCountry if (len(self.twoDaysCountry) != 0) else "None"
+    self.twoDaysTotalCases = self.twoDaysTotalCases if (len(self.twoDaysTotalCases) != 0) else "None"
+    self.twoDaysNewCases = self.twoDaysNewCases if (len(self.twoDaysNewCases) != 0) else "None"
+    self.twoDaysTotalDeaths = self.twoDaysTotalDeaths if (len(self.twoDaysTotalDeaths) != 0) else "None"
+    self.twoDaysNewDeaths = self.twoDaysNewDeaths if (len(self.twoDaysNewDeaths) != 0) else "None"
+    self.twoDaysTotalRecovered = self.twoDaysTotalRecovered if (len(self.twoDaysTotalRecovered) != 0) else "None"
+    self.twoDaysNewRecovered = self.twoDaysNewRecovered if (len(self.twoDaysNewRecovered) != 0) else "None"
+    self.twoDaysActiveCases = self.twoDaysActiveCases if (len(self.twoDaysActiveCases) != 0) else "None"
+    self.twoDaysSeriousCritical = self.twoDaysSeriousCritical if (len(self.twoDaysSeriousCritical) != 0) else "None"
+    self.twoDaysCasesPerMillion = self.twoDaysCasesPerMillion if (len(self.twoDaysCasesPerMillion) != 0) else "None"
+    self.twoDaysDeathsPerMillion = self.twoDaysDeathsPerMillion if (len(self.twoDaysDeathsPerMillion) != 0) else "None"
+    self.twoDaysTotalTests = self.twoDaysTotalTests if (len(self.twoDaysTotalTests) != 0) else "None"
+    self.twoDaysTestsPerMillion = self.twoDaysTestsPerMillion if (len(self.twoDaysTestsPerMillion) != 0) else "None"
+    self.twoDaysPopulation = self.twoDaysPopulation if (len(self.twoDaysPopulation) != 0) else "None"
+
+    loader = ItemLoader(item=TwoDaysCoronaItem(),response=response)
+    loader.add_value("twoDaysRank",self.twoDaysRank)
+    loader.add_value("twoDaysCountry",self.twoDaysCountry)
+    loader.add_value("twoDaysTotalCases",self.twoDaysTotalCases)
+    loader.add_value("twoDaysNewCases",self.twoDaysNewCases)
+    loader.add_value("twoDaysTotalDeaths",self.twoDaysTotalDeaths)
+    loader.add_value("twoDaysNewDeaths",self.twoDaysNewDeaths)
+    loader.add_value("twoDaysTotalRecovered",self.twoDaysTotalRecovered)
+    loader.add_value("twoDaysNewRecovered",self.twoDaysNewRecovered)
+    loader.add_value("twoDaysActiveCases",self.twoDaysActiveCases)
+    loader.add_value("twoDaysSeriousCritical",self.twoDaysSeriousCritical)
+    loader.add_value("twoDaysCasesPerMillion",self.twoDaysCasesPerMillion)
+    loader.add_value("twoDaysDeathsPerMillion",self.twoDaysDeathsPerMillion)
+    loader.add_value("twoDaysTotalTests",self.twoDaysTotalTests)
+    loader.add_value("twoDaysTestsPerMillion",self.twoDaysTestsPerMillion)
+    loader.add_value("twoDaysPopulation",self.twoDaysPopulation)
+    return loader
 
 def checkEmpty(data):
     if (data == None or len(data) == 0):

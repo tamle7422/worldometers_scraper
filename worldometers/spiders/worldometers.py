@@ -3,7 +3,8 @@ import scrapy
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from ..hf_worldometers import checkEmpty,setNowTotalCases,setNowNewCases,setNowTotalDeaths,setNowNewDeaths, \
-    setNowTotalRecovered,setNowNewRecovered,setNowActiveCases,setValue,loadNowCoronaItem,loadYesterdayCoronaItem
+    setNowTotalRecovered,setNowNewRecovered,setNowActiveCases,setValue,loadNowCoronaItem,loadYesterdayCoronaItem, \
+    loadTwoDaysCoronaItem
 
 # using selenium
 class CoronavirusSpider(scrapy.Spider):
@@ -294,19 +295,19 @@ class CoronavirusSpider(scrapy.Spider):
                 twoDaysDeathsPerMillion = twoWebElem.find_element_by_xpath(".//td[12]").get_attribute("innerText")
                 setValue(self,twoDaysDeathsPerMillion,"twoDaysDeathsPerMillion")
 
-                nowTotalTests = nWebElem.find_element_by_xpath(".//td[13]").get_attribute("innerText")
-                setValue(self,nowTotalTests,"nowTotalTests")
+                twoDaysTotalTests = twoWebElem.find_element_by_xpath(".//td[13]").get_attribute("innerText")
+                setValue(self,twoDaysTotalTests,"twoDaysTotalTests")
 
-                nowTestsPerMillion = nWebElem.find_element_by_xpath(".//td[14]").get_attribute("innerText")
-                setValue(self,nowTestsPerMillion,"nowTestsPerMillion")
+                twoDaysTestsPerMillion = twoWebElem.find_element_by_xpath(".//td[14]").get_attribute("innerText")
+                setValue(self,twoDaysTestsPerMillion,"twoDaysTestsPerMillion")
 
-                nowPopulation = nWebElem.find_element_by_xpath(".//td[15]").get_attribute("innerText")
-                setValue(self,nowPopulation,"nowPopulation")
+                twoDaysPopulation = twoWebElem.find_element_by_xpath(".//td[15]").get_attribute("innerText")
+                setValue(self,twoDaysPopulation,"twoDaysPopulation")
 
-                loader = loadNowCoronaItem(self,response)
+                loader = loadTwoDaysCoronaItem(self,response)
                 yield loader.load_item()
 
         except Exception as ex:
-            print("exception => error click 2 days --- {0}".format(ex))
+            print("exception => error click two days --- {0}".format(ex))
 
         self.driver.quit()
