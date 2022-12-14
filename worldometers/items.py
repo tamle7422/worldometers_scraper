@@ -5,56 +5,86 @@
 
 import scrapy
 
-class NowCoronaItem(scrapy.Item):
-    nowRank = scrapy.Field()
-    nowCountry = scrapy.Field()
-    nowTotalCases = scrapy.Field()
-    nowNewCases = scrapy.Field()
-    nowTotalDeaths = scrapy.Field()
-    nowNewDeaths = scrapy.Field()
-    nowTotalRecovered = scrapy.Field()
-    nowNewRecovered = scrapy.Field()
-    nowActiveCases = scrapy.Field()
-    nowSeriousCritical = scrapy.Field()
-    nowCasesPerMillion = scrapy.Field()
-    nowDeathsPerMillion = scrapy.Field()
-    nowTotalTests = scrapy.Field()
-    nowTestsPerMillion = scrapy.Field()
-    nowPopulation = scrapy.Field()
+class CoronavirusCurrItem(scrapy.Item):
+    try:
+        rankCurr = scrapy.Field()
+        countryCurr = scrapy.Field()
+        totalCasesCurr = scrapy.Field()
+        newCasesCurr = scrapy.Field()
+        totalDeathsCurr = scrapy.Field()
+        newDeathsCurr = scrapy.Field()
+        totalRecoveredCurr = scrapy.Field()
+        newRecoveredCurr = scrapy.Field()
+        activeCasesCurr = scrapy.Field()
+        seriousCriticalCurr = scrapy.Field()
+        casesPerMillionCurr = scrapy.Field()
+        deathsPerMillionCurr = scrapy.Field()
+        totalTestsCurr = scrapy.Field()
+        testsPerMillionCurr = scrapy.Field()
+        populationCurr = scrapy.Field()
 
-class YesterdayCoronaItem(scrapy.Item):
-    yesterdayRank = scrapy.Field()
-    yesterdayCountry = scrapy.Field()
-    yesterdayTotalCases = scrapy.Field()
-    yesterdayNewCases = scrapy.Field()
-    yesterdayTotalDeaths = scrapy.Field()
-    yesterdayNewDeaths = scrapy.Field()
-    yesterdayTotalRecovered = scrapy.Field()
-    yesterdayNewRecovered = scrapy.Field()
-    yesterdayActiveCases = scrapy.Field()
-    yesterdaySeriousCritical = scrapy.Field()
-    yesterdayCasesPerMillion = scrapy.Field()
-    yesterdayDeathsPerMillion = scrapy.Field()
-    yesterdayTotalTests = scrapy.Field()
-    yesterdayTestsPerMillion = scrapy.Field()
-    yesterdayPopulation = scrapy.Field()
+    except Exception as ex:
+        print("exception --- error in class coronavirus current item => {0}".format(ex))
 
-class TwoDaysCoronaItem(scrapy.Item):
-    twoDaysRank = scrapy.Field()
-    twoDaysCountry = scrapy.Field()
-    twoDaysTotalCases = scrapy.Field()
-    twoDaysNewCases = scrapy.Field()
-    twoDaysTotalDeaths = scrapy.Field()
-    twoDaysNewDeaths = scrapy.Field()
-    twoDaysTotalRecovered = scrapy.Field()
-    twoDaysNewRecovered = scrapy.Field()
-    twoDaysActiveCases = scrapy.Field()
-    twoDaysSeriousCritical = scrapy.Field()
-    twoDaysCasesPerMillion = scrapy.Field()
-    twoDaysDeathsPerMillion = scrapy.Field()
-    twoDaysTotalTests = scrapy.Field()
-    twoDaysTestsPerMillion = scrapy.Field()
-    twoDaysPopulation = scrapy.Field()
+class CoronavirusYestItem(scrapy.Item):
+    try:
+        rankYest = scrapy.Field()
+        countryYest = scrapy.Field()
+        totalCasesYest = scrapy.Field()
+        newCasesYest = scrapy.Field()
+        totalDeathsYest = scrapy.Field()
+        newDeathsYest = scrapy.Field()
+        totalRecoveredYest = scrapy.Field()
+        newRecoveredYest = scrapy.Field()
+        activeCasesYest = scrapy.Field()
+        seriousCriticalYest = scrapy.Field()
+        casesPerMillionYest = scrapy.Field()
+        deathsPerMillionYest = scrapy.Field()
+        totalTestsYest = scrapy.Field()
+        testsPerMillionYest = scrapy.Field()
+        populationYest = scrapy.Field()
+
+    except Exception as ex:
+        print("exception --- error in class coronavirus yesterday item => {0}".format(ex))
+
+class Coronavirus2DaysItem(scrapy.Item):
+    try:
+        rank2Days = scrapy.Field()
+        country2Days = scrapy.Field()
+        totalCases2Days = scrapy.Field()
+        newCases2Days = scrapy.Field()
+        totalDeaths2Days = scrapy.Field()
+        newDeaths2Days = scrapy.Field()
+        totalRecovered2Days = scrapy.Field()
+        newRecovered2Days = scrapy.Field()
+        activeCases2Days = scrapy.Field()
+        seriousCritical2Days = scrapy.Field()
+        casesPerMillion2Days = scrapy.Field()
+        deathsPerMillion2Days = scrapy.Field()
+        totalTests2Days = scrapy.Field()
+        testsPerMillion2Days = scrapy.Field()
+        population2Days = scrapy.Field()
+
+    except Exception as ex:
+        print("exception --- error in class coronavirus 2 days item => {0}".format(ex))
+
+class PopulationItem(scrapy.Item):
+    try:
+        country = scrapy.Field()
+        population = scrapy.Field()
+        yearlyChange = scrapy.Field()
+        netChange = scrapy.Field()
+        density = scrapy.Field()
+        landArea = scrapy.Field()
+        migrants = scrapy.Field()
+        fertilizationRate = scrapy.Field()
+        medianAge = scrapy.Field()
+        urbanPopPercent = scrapy.Field()
+        worldShare = scrapy.Field()
+
+    except Exception as ex:
+        print("exception --- error in class population item => {0}".format(ex))
+
 
 
 

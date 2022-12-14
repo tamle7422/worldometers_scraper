@@ -1,2 +1,2 @@
 # worldometers_scraper
-Scraping info
+Scraping coronavirus data by country

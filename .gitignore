@@ -1,3 +1,9 @@
+# gitignore for worldometers project
+bin
+bin/*
+lib
+lib/*
+
 Scripts
 Scripts/
 Scripts/*
@@ -19,19 +25,16 @@ worldometers/geckodriver.exe
 __pycache__
 __pycache__/
 
-Lib
-Lib/
 lib
 lib/
 Include
 
 bin
 bin/
-/bin
 
 log
 /log
-log/
+log/*
 ~log
 
 # compiled class file
